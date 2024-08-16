@@ -3,7 +3,7 @@ package MiniJava.semantic.symbol;
 import MiniJava.codeGenerator.Address;
 import MiniJava.codeGenerator.Memory;
 import MiniJava.codeGenerator.TypeAddress;
-import MiniJava.codeGenerator.varType;
+import MiniJava.codeGenerator.VarType;
 import MiniJava.errorHandler.ErrorHandler;
 
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ public class SymbolTable {
         mem = memory;
         klasses = new HashMap<>();
         keyWords = new HashMap<>();
-        keyWords.put("true", new Address(1, varType.Bool, TypeAddress.Imidiate));
-        keyWords.put("false", new Address(0, varType.Bool, TypeAddress.Imidiate));
+        keyWords.put("true", new Address(1, VarType.Bool, TypeAddress.Imidiate));
+        keyWords.put("false", new Address(0, VarType.Bool, TypeAddress.Imidiate));
     }
 
     public void setLastType(SymbolType type) {
@@ -51,14 +51,10 @@ public class SymbolTable {
     }
 
     public void addMethodLocalVariable(String className, String methodName, String localVariableName) {
-//        try {
         if (klasses.get(className).Methodes.get(methodName).localVariable.containsKey(localVariableName)) {
             ErrorHandler.printError("This variable already defined");
         }
         klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName, new Symbol(lastType, mem.getDateAddress()));
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
     }
 
     public void setSuperClass(String superClass, String className) {
@@ -70,13 +66,7 @@ public class SymbolTable {
     }
 
     public Symbol get(String fieldName, String className) {
-//        try {
         return klasses.get(className).getField(fieldName);
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//            return null;
-//        }
     }
 
     public Symbol get(String className, String methodName, String variable) {
@@ -182,17 +172,3 @@ public class SymbolTable {
     }
 
 }
-
-//class Symbol{
-//    public SymbolType type;
-//    public int address;
-//    public Symbol(SymbolType type , int address)
-//    {
-//        this.type = type;
-//        this.address = address;
-//    }
-//}
-//enum SymbolType{
-//    Int,
-//    Bool
-//}
