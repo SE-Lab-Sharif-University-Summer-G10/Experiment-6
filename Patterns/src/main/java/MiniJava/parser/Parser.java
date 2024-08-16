@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import MiniJava.Log.Log;
-import MiniJava.codeGenerator.CodeGenerator;
+import MiniJava.codeGenerator.CodeGeneratorFacade;
 import MiniJava.errorHandler.ErrorHandler;
 import MiniJava.scanner.lexicalAnalyzer;
 import MiniJava.scanner.token.Token;
@@ -17,7 +17,7 @@ public class Parser {
     private Stack<Integer> parsStack;
     private ParseTable parseTable;
     private lexicalAnalyzer lexicalAnalyzer;
-    private CodeGenerator cg;
+    private final CodeGeneratorFacade codeGeneratorFacade;
 
     public Parser() {
         parsStack = new Stack<Integer>();
@@ -35,7 +35,7 @@ public class Parser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        cg = new CodeGenerator();
+        codeGeneratorFacade = new CodeGeneratorFacade();
     }
 
     public void startParse(java.util.Scanner sc) {
@@ -69,7 +69,7 @@ public class Parser {
                         Log.print(/*"new State : " + */parsStack.peek() + "");
 //                        Log.print("");
                         try {
-                            cg.semanticFunction(rule.semanticAction, lookAhead);
+                            codeGeneratorFacade.semanticFunction(rule.semanticAction, lookAhead);
                         } catch (Exception e) {
                             Log.print("Code Genetator Error");
                         }
@@ -98,6 +98,6 @@ public class Parser {
 //                    parsStack.pop();
             }
         }
-        if (!ErrorHandler.hasError) cg.printMemory();
+        if (!ErrorHandler.hasError) codeGeneratorFacade.printMemory();
     }
 }
