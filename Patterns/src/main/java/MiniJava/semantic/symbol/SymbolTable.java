@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SymbolTable {
-    private Map<String, Klass> klasses;
-    private Map<String, Address> keyWords;
-    private Memory mem;
+    private final Map<String, Klass> klasses;
+    private final Map<String, Address> keyWords;
+    private final Memory mem;
     private SymbolType lastType;
 
     public SymbolTable(Memory memory) {
@@ -80,12 +80,7 @@ public class SymbolTable {
     }
 
     public void startCall(String className, String methodName) {
-//        try {
         klasses.get(className).Methodes.get(methodName).reset();
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//        }
     }
 
     public int getMethodCallerAddress(String className, String methodName) {
@@ -97,13 +92,7 @@ public class SymbolTable {
     }
 
     public SymbolType getMethodReturnType(String className, String methodName) {
-//        try {
         return klasses.get(className).Methodes.get(methodName).returnType;
-//        }catch (NullPointerException ed){
-//            ed.printStackTrace();
-//            return null;
-//        }
-
     }
 
     public int getMethodAddress(String className, String methodName) {
