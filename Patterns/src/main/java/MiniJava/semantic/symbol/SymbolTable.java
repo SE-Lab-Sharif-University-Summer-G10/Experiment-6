@@ -13,11 +13,11 @@ import java.util.Map;
 public class SymbolTable {
     private final Map<String, Klass> klasses;
     private final Map<String, Address> keyWords;
-    private final Memory mem;
+    private final Memory memory;
     private SymbolType lastType;
 
     public SymbolTable(Memory memory) {
-        mem = memory;
+        this.memory = memory;
         klasses = new HashMap<>();
         keyWords = new HashMap<>();
         keyWords.put("true", new Address(1, VarType.Bool, TypeAddress.Imidiate));
@@ -36,7 +36,8 @@ public class SymbolTable {
     }
 
     public void addField(String fieldName, String className) {
-        klasses.get(className).Fields.put(fieldName, new Symbol(lastType, mem.getDateAddress()));
+        klasses.get(className).Fields.put(fieldName, new Symbol(lastType, memory.getDateAddress()));
+        memory.incrementDataAddress();
     }
 
     public void addMethod(String className, String methodName, int address) {
@@ -54,7 +55,8 @@ public class SymbolTable {
         if (klasses.get(className).Methodes.get(methodName).localVariable.containsKey(localVariableName)) {
             ErrorHandler.printError("This variable already defined");
         }
-        klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName, new Symbol(lastType, mem.getDateAddress()));
+        klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName, new Symbol(lastType, memory.getDateAddress()));
+        memory.incrementDataAddress();
     }
 
     public void setSuperClass(String superClass, String className) {
@@ -134,8 +136,10 @@ public class SymbolTable {
             this.codeAddress = codeAddress;
             this.returnType = returnType;
             this.orderdParameters = new ArrayList<>();
-            this.returnAddress = mem.getDateAddress();
-            this.callerAddress = mem.getDateAddress();
+            this.returnAddress = memory.getDateAddress();
+            memory.incrementDataAddress();
+            this.callerAddress = memory.getDateAddress();
+            memory.incrementDataAddress();
             this.parameters = new HashMap<>();
             this.localVariable = new HashMap<>();
         }
@@ -147,7 +151,8 @@ public class SymbolTable {
         }
 
         public void addParameter(String parameterName) {
-            parameters.put(parameterName, new Symbol(lastType, mem.getDateAddress()));
+            parameters.put(parameterName, new Symbol(lastType, memory.getDateAddress()));
+            memory.incrementDataAddress();
             orderdParameters.add(parameterName);
         }
 
