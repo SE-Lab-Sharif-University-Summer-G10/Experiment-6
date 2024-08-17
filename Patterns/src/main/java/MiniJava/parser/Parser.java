@@ -40,13 +40,13 @@ public class Parser {
             parsStack.pop();
         }
 
-        Log.print(parsStack.peek() + "\t" + rule.LHS);
+        Log.print(parsStack.peek() + "\t" + rule.getLHS());
 
-        parsStack.push(parseTable.getGotoTable(parsStack.peek(), rule.LHS));
+        parsStack.push(parseTable.getGotoTable(parsStack.peek(), rule.getLHS()));
 
         Log.print(parsStack.peek() + "");
         try {
-            codeGeneratorFacade.semanticFunction(rule.semanticAction, lookAhead);
+            codeGeneratorFacade.semanticFunction(rule.getSemanticAction(), lookAhead);
         } catch (Exception e) {
             Log.print("Code Genetator Error");
         }
