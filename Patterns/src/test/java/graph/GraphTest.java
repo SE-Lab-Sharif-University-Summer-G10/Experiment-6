@@ -2,7 +2,6 @@ package graph;
 
 import graph.road.RoadContext;
 import graph.road.TwoWayRoadState;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import graph.road.RoadContext;
 
 public class TrainTravelStrategy implements ITravelStrategy {
 
-    private RoadContext context;
+    private final RoadContext context;
 
     public TrainTravelStrategy(RoadContext context) {
         this.context = context;
