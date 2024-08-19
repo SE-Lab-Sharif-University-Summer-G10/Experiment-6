@@ -1,6 +1,7 @@
 package graph;
 
 import lombok.Getter;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +23,6 @@ public class Graph {
     }
 
     public void bfs(Node s) {
-        this.resetVisits();
 
         Queue<Pair<Node, Integer>> nodes = new LinkedList<>();
         nodes.add(new Pair<Node, Integer>(s, 0));
@@ -42,8 +42,6 @@ public class Graph {
     }
 
     public void dijkstra(Node s) {
-        this.resetVisits();
-
         PriorityQueue<Pair<Integer, Node>> nodes = new PriorityQueue<>();
         nodes.add(new Pair<Integer, Node>(0, s));
         while (!nodes.isEmpty()) {
