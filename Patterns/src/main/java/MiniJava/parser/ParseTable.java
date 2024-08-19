@@ -12,8 +12,8 @@ import java.util.Map;
  */
 
 public class ParseTable {
-    private ArrayList<Map<Token, Action>> actionTable;
-    private ArrayList<Map<NonTerminal, Integer>> gotoTable;
+    private final ArrayList<Map<Token, Action>> actionTable;
+    private final ArrayList<Map<NonTerminal, Integer>> gotoTable;
 
     public ParseTable(String jsonTable) throws Exception {
         jsonTable = jsonTable.substring(2, jsonTable.length() - 2);
@@ -31,7 +31,7 @@ public class ParseTable {
                     ErrorHandler.printError(e.getMessage());
                 }
             } else {
-                terminals.put(i, new Token(Token.getTyepFormString(cols[i]), cols[i]));
+                terminals.put(i, new Token(Token.getTypeFormString(cols[i]), cols[i]));
             }
         }
         actionTable = new ArrayList<Map<Token, Action>>();
@@ -50,13 +50,9 @@ public class ParseTable {
                     if (cols[j].equals("acc")) {
                         actionTable.get(actionTable.size() - 1).put(terminals.get(j), new Action(act.accept, 0));
                     } else if (terminals.containsKey(j)) {
-//                        try {
                         Token t = terminals.get(j);
                         Action a = new Action(cols[j].charAt(0) == 'r' ? act.reduce : act.shift, Integer.parseInt(cols[j].substring(1)));
                         actionTable.get(actionTable.size() - 1).put(t, a);
-//                        }catch (StringIndexOutOfBoundsException e){
-//                            e.printStackTrace();
-//                        }
                     } else if (nonTerminals.containsKey(j)) {
                         gotoTable.get(gotoTable.size() - 1).put(nonTerminals.get(j), Integer.parseInt(cols[j]));
                     } else {
@@ -68,13 +64,7 @@ public class ParseTable {
     }
 
     public int getGotoTable(int currentState, NonTerminal variable) {
-//        try {
         return gotoTable.get(currentState).get(variable);
-//        }catch (NullPointerException dd)
-//        {
-//            dd.printStackTrace();
-//        }
-//        return 0;
     }
 
     public Action getActionTable(int currentState, Token terminal) {

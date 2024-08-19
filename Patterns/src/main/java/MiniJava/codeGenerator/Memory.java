@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by mohammad hosein on 6/27/2015.
  */
 public class Memory {
-    private ArrayList<_3AddressCode> codeBlock;
+    private final ArrayList<_3AddressCode> codeBlock;
     private int lastTempIndex;
     private int lastDataAddress;
     private final int stratTempMemoryAddress = 500;
@@ -15,19 +15,29 @@ public class Memory {
     private final int tempSize = 4;
 
     public Memory() {
-        codeBlock = new ArrayList<_3AddressCode>();
+        codeBlock = new ArrayList<>();
         lastTempIndex = stratTempMemoryAddress;
         lastDataAddress = stratDataMemoryAddress;
     }
 
-    public int getTemp() {
+    // Modifier method
+    public void incrementTemp() {
         lastTempIndex += tempSize;
-        return lastTempIndex - tempSize;
     }
 
-    public int getDateAddress() {
+    // Query method
+    public int getTemp() {
+        return lastTempIndex;
+    }
+
+    // Modifier method
+    public void incrementDataAddress() {
         lastDataAddress += dataSize;
-        return lastDataAddress - dataSize;
+    }
+
+    // Query method
+    public int getDateAddress() {
+        return lastDataAddress;
     }
 
     public int saveMemory() {
@@ -77,11 +87,11 @@ class _3AddressCode {
         if (operation == null) return "";
         StringBuffer res = new StringBuffer("(");
         res.append(operation.toString()).append(",");
-        if (Operand1 != null) res.append(Operand1.toString());
+        if (Operand1 != null) res.append(Operand1);
         res.append(",");
-        if (Operand2 != null) res.append(Operand2.toString());
+        if (Operand2 != null) res.append(Operand2);
         res.append(",");
-        if (Operand3 != null) res.append(Operand3.toString());
+        if (Operand3 != null) res.append(Operand3);
         res.append(")");
 
         return res.toString();

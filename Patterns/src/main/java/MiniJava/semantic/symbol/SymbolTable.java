@@ -3,7 +3,7 @@ package MiniJava.semantic.symbol;
 import MiniJava.codeGenerator.Address;
 import MiniJava.codeGenerator.Memory;
 import MiniJava.codeGenerator.TypeAddress;
-import MiniJava.codeGenerator.varType;
+import MiniJava.codeGenerator.VarType;
 import MiniJava.errorHandler.ErrorHandler;
 
 import java.util.ArrayList;
@@ -11,17 +11,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SymbolTable {
-    private Map<String, Klass> klasses;
-    private Map<String, Address> keyWords;
-    private Memory mem;
+    private final Map<String, Klass> klasses;
+    private final Map<String, Address> keyWords;
+    private final Memory memory;
     private SymbolType lastType;
 
     public SymbolTable(Memory memory) {
-        mem = memory;
+        this.memory = memory;
         klasses = new HashMap<>();
         keyWords = new HashMap<>();
-        keyWords.put("true", new Address(1, varType.Bool, TypeAddress.Imidiate));
-        keyWords.put("false", new Address(0, varType.Bool, TypeAddress.Imidiate));
+        keyWords.put("true", new Address(1, VarType.Bool, TypeAddress.Imidiate));
+        keyWords.put("false", new Address(0, VarType.Bool, TypeAddress.Imidiate));
     }
 
     public void setLastType(SymbolType type) {
@@ -36,7 +36,8 @@ public class SymbolTable {
     }
 
     public void addField(String fieldName, String className) {
-        klasses.get(className).Fields.put(fieldName, new Symbol(lastType, mem.getDateAddress()));
+        klasses.get(className).Fields.put(fieldName, new Symbol(lastType, memory.getDateAddress()));
+        memory.incrementDataAddress();
     }
 
     public void addMethod(String className, String methodName, int address) {
@@ -51,14 +52,11 @@ public class SymbolTable {
     }
 
     public void addMethodLocalVariable(String className, String methodName, String localVariableName) {
-//        try {
         if (klasses.get(className).Methodes.get(methodName).localVariable.containsKey(localVariableName)) {
             ErrorHandler.printError("This variable already defined");
         }
-        klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName, new Symbol(lastType, mem.getDateAddress()));
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
+        klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName, new Symbol(lastType, memory.getDateAddress()));
+        memory.incrementDataAddress();
     }
 
     public void setSuperClass(String superClass, String className) {
@@ -70,13 +68,7 @@ public class SymbolTable {
     }
 
     public Symbol get(String fieldName, String className) {
-//        try {
         return klasses.get(className).getField(fieldName);
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//            return null;
-//        }
     }
 
     public Symbol get(String className, String methodName, String variable) {
@@ -90,12 +82,7 @@ public class SymbolTable {
     }
 
     public void startCall(String className, String methodName) {
-//        try {
         klasses.get(className).Methodes.get(methodName).reset();
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//        }
     }
 
     public int getMethodCallerAddress(String className, String methodName) {
@@ -107,13 +94,7 @@ public class SymbolTable {
     }
 
     public SymbolType getMethodReturnType(String className, String methodName) {
-//        try {
         return klasses.get(className).Methodes.get(methodName).returnType;
-//        }catch (NullPointerException ed){
-//            ed.printStackTrace();
-//            return null;
-//        }
-
     }
 
     public int getMethodAddress(String className, String methodName) {
@@ -155,8 +136,10 @@ public class SymbolTable {
             this.codeAddress = codeAddress;
             this.returnType = returnType;
             this.orderdParameters = new ArrayList<>();
-            this.returnAddress = mem.getDateAddress();
-            this.callerAddress = mem.getDateAddress();
+            this.returnAddress = memory.getDateAddress();
+            memory.incrementDataAddress();
+            this.callerAddress = memory.getDateAddress();
+            memory.incrementDataAddress();
             this.parameters = new HashMap<>();
             this.localVariable = new HashMap<>();
         }
@@ -168,7 +151,8 @@ public class SymbolTable {
         }
 
         public void addParameter(String parameterName) {
-            parameters.put(parameterName, new Symbol(lastType, mem.getDateAddress()));
+            parameters.put(parameterName, new Symbol(lastType, memory.getDateAddress()));
+            memory.incrementDataAddress();
             orderdParameters.add(parameterName);
         }
 
@@ -182,17 +166,3 @@ public class SymbolTable {
     }
 
 }
-
-//class Symbol{
-//    public SymbolType type;
-//    public int address;
-//    public Symbol(SymbolType type , int address)
-//    {
-//        this.type = type;
-//        this.address = address;
-//    }
-//}
-//enum SymbolType{
-//    Int,
-//    Bool
-//}
